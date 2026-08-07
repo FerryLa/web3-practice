@@ -80,10 +80,10 @@ SKU
 개발용 기본 조회 주소:
 
 ```text
-https://store.xsolla.com/api/v2/project/930170/items/virtual_currency/package?limit=50&offset=0&locale=ko&country=KR
+https://store.xsolla.com/api/v2/project/312439/items/virtual_currency/package?limit=50&offset=0&locale=ko&country=KR
 ```
 
-여기에는 Login ID가 아니라 **Publisher 프로젝트 ID `930170`**을 사용한다.
+URL의 `930170`은 Publisher Account ID이고, 카탈로그 API에는 **프로젝트 ID `312439`**를 사용한다.
 
 응답에서 확인할 핵심 필드는 다음과 같다.
 
@@ -97,15 +97,30 @@ https://store.xsolla.com/api/v2/project/930170/items/virtual_currency/package?li
 
 인증 없이 요청하면 기본 카탈로그를 받을 수 있다. 로그인 이후 `Authorization: Bearer <사용자 JWT>` 헤더를 포함하면 사용자별 구매 제한, 프로모션과 개인화 결과가 반영될 수 있다.
 
+### 카탈로그 검증 결과
+
+2026-08-07에 공개 카탈로그 API를 조회해 다음 항목을 확인했다.
+
+| SKU | 가격 | 지급 수량 | 판매 가능 | 이미지 |
+|---|---:|---:|---|---|
+| `bluc_pack_1000` | $4.99 | 1,000 | `true` | 있음 |
+| `bluc_pack_2050` | $9.99 | 2,050 | `true` | 있음 |
+| `bluc_pack_4150` | $19.99 | 4,150 | `true` | 있음 |
+| `bluc_pack_10700` | $49.99 | 10,700 | `true` | 있음 |
+| `bluc_pack_23500` | $99.99 | 23,500 | `true` | 있음 |
+| `bluc_pack_53000` | $199.99 | 53,000 | `true` | 있음 |
+
+응답은 `items` 6개와 `has_more: false`를 반환했다. 이 검증은 Publisher Account의 설정이 Xsolla 서버에 저장·공개되어 실제 웹숍 프런트엔드가 사용할 JSON으로 전달되는지 확인하는 과정이다. 결제창, 실제 결제, 웹훅과 게임 내 BLUC 지급은 이후 주문·지급 통합 단계에서 별도로 테스트한다.
+
 ## 완료 및 확인 항목
 
 - [x] BLUC 가상 화폐 생성
 - [x] BLUC 패키지 생성
 - [x] BLUC 1단위 대표 이미지 제작
 - [x] 패키지 카드 이미지 6개 제작
-- [ ] BLUC와 각 패키지에 이미지 업로드 확인
-- [ ] 모든 패키지의 스토어 표시 및 판매 상태 확인
-- [ ] 카탈로그 API에서 패키지 전체 조회 확인
+- [x] BLUC와 각 패키지에 이미지 업로드 확인
+- [x] 모든 패키지의 스토어 표시 및 판매 상태 확인
+- [x] 카탈로그 API에서 패키지 6개 전체 조회 확인
 - [ ] 프런트엔드에서 API 응답을 상품 카드로 렌더링
 
 ## 다음 장
