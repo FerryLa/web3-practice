@@ -29,7 +29,7 @@ https://login.xsolla.com/api/social/oauth2/callback
 
 ## Callback과 CORS의 차이
 
-![Callback과 CORS의 차이](../docs/callback-vs-cors.png)
+![Callback과 CORS의 차이](./callback-vs-cors.png)
 
 | 구분 | Callback | CORS |
 |---|---|---|

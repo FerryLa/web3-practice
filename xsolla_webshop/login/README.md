@@ -28,11 +28,11 @@
 
 ## 대시보드 카테고리
 
-1. [로그인 방법](./01-login-methods.md)
-2. [보안](./02-security.md)
-3. [인증](./03-authentication.md)
-4. [사용자 데이터베이스](./04-user-database.md)
-5. [사용자 정의와 운영 설정](./05-customization-and-operations.md)
+1. [로그인 방법](./docs/01-login-methods.md)
+2. [보안](./docs/02-security.md)
+3. [인증](./docs/03-authentication.md)
+4. [사용자 데이터베이스](./docs/04-user-database.md)
+5. [사용자 정의와 운영 설정](./docs/05-customization-and-operations.md)
 
 ## 현재 완성된 인증 흐름
 
@@ -50,7 +50,7 @@ Publisher Account의 설정은 준비됐지만 마지막 두 단계는 아직 �
 
 ## Callback과 CORS 한눈에 보기
 
-![Callback과 CORS의 차이](../docs/callback-vs-cors.png)
+![Callback과 CORS의 차이](./docs/callback-vs-cors.png)
 
 - **Callback**은 인증이 끝난 사용자의 브라우저를 어느 페이지로 이동시킬지 정한다.
 - **CORS**는 우리 웹숍의 브라우저 코드가 다른 출처인 Xsolla API의 응답을 읽어도 되는지 결정한다.
@@ -75,8 +75,8 @@ Publisher Account의 설정은 준비됐지만 마지막 두 단계는 아직 �
 
 ## 관련 자료
 
-- [Callback 설정 화면 장애 기록](../error/callbackUrl/README.md)
-- [Callback과 CORS 비교 이미지](../docs/callback-vs-cors.png)
+- [Callback 설정 화면 장애 기록](./error/callbackUrl/README.md)
+- [Callback과 CORS 비교 이미지](./docs/callback-vs-cors.png)
 
 ## 보안 메모
 
