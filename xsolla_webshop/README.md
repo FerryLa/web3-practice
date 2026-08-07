@@ -45,6 +45,7 @@ OVERDARE Webshop과 같은 게임용 D2C 웹숍의 로그인, 상품 카드, 개
 ## 학습 챕터
 
 - [CHAP 01 — Login](./login/README.md)
+- [CHAP 02 — Catalog](./catalog/README.md)
 
 ### 2. 프런트엔드
 
