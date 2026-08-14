@@ -1,6 +1,6 @@
 # Xsolla Webshop 학습 프로젝트
 
-OVERDARE Webshop과 같은 게임용 D2C 웹숍의 로그인, 상품 카드, 개인화 카탈로그를 작은 단계로 구현한다.
+게임용 D2C 웹숍의 로그인, 상품 카드, 개인화 카탈로그를 작은 단계로 구현한다.
 
 ## 오늘의 범위
 
@@ -39,13 +39,14 @@ OVERDARE Webshop과 같은 게임용 D2C 웹숍의 로그인, 상품 카드, 개
 - [x] Google 로그인 연결
 - [ ] Apple 자체 로그인 연결 — 유료 Apple Developer Program이 필요해 보류
 - [ ] 위젯 로고, 색상, 문구 설정
-- [ ] BLUC 상품 카탈로그 구성
-- [ ] 로그인 사용자용 추가 혜택 설계
+- [x] BLUC 상품 카탈로그 구성
+- [x] 로그인 사용자용 추가 혜택 및 표시 규칙 설계
 
 ## 학습 챕터
 
 - [CHAP 01 — Login](./login/README.md)
 - [CHAP 02 — Catalog](./catalog/README.md)
+- [CHAP 03 — Personalization](./personalization/README.md)
 
 ### 2. 프런트엔드
 

@@ -19,7 +19,7 @@
 
 | 항목 | 값 | 용도 |
 |---|---:|---|
-| Publisher 프로젝트 | `OVERDARE` | 결제, 카탈로그, Login을 포함하는 상위 프로젝트 |
+| Publisher 프로젝트 | 학습용 프로젝트 | 결제, 카탈로그, Login을 포함하는 상위 프로젝트 |
 | Publisher 프로젝트 ID | `930170` | Publisher API와 프로젝트 식별에 사용 |
 | Login 이름 | `Login` | 사용자 인증 프로젝트 |
 | 화면에 표시된 Login ID | `312439` | Login 프로젝트 식별에 사용 |
