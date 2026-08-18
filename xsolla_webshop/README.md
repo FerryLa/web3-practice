@@ -47,15 +47,16 @@
 - [CHAP 01 — Login](./login/README.md)
 - [CHAP 02 — Catalog](./catalog/README.md)
 - [CHAP 03 — Personalization](./personalization/README.md)
+- [CHAP 04 — Frontend Integration](./frontend/README.md)
 
 ### 2. 프런트엔드
 
-- [ ] 개발 서버와 callback 페이지 생성
-- [ ] 환경 변수로 Login project ID 설정
-- [ ] Xsolla Login 위젯 열기
-- [ ] callback의 로그인 결과 처리
-- [ ] 기본 상품 카드 표시
-- [ ] 로그인 후 개인화 상품 카드 표시
+- [x] 개발 서버와 callback 페이지 생성
+- [x] 환경 변수로 Login project ID 설정
+- [x] Xsolla Login 위젯 열기
+- [x] callback의 로그인 결과 처리
+- [x] 기본 상품 카드 표시
+- [x] 로그인 후 개인화 상품 카드 표시
 
 ### 3. 백엔드 개념
 
