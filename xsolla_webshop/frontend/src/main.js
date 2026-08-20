@@ -6,6 +6,7 @@ import {
   isExpired,
   readAuthCallback,
   saveToken,
+  verifyTokenWithBackend,
 } from "./auth.js";
 import { fetchCatalog, MEMBER_SKU, normalizeItem, sortItems } from "./catalog.js";
 import "./styles.css";
@@ -16,6 +17,7 @@ const config = {
   callbackUrl:
     import.meta.env.VITE_XSOLLA_CALLBACK_URL?.trim() ||
     `${window.location.origin}/auth/callback`,
+  authApiUrl: import.meta.env.VITE_AUTH_API_URL?.trim() ?? "",
 };
 
 const app = document.querySelector("#app");
@@ -23,6 +25,7 @@ let widget = null;
 let token = getToken();
 let catalogRequest = null;
 let callbackNotice = null;
+let verifiedSession = null;
 
 function html() {
   app.innerHTML = `
@@ -120,9 +123,13 @@ function renderSession() {
   const heroLoginButton = document.querySelector("#hero-login-button");
   const logoutButton = document.querySelector("#logout-button");
 
-  chip.textContent = loggedIn ? "로그인됨" : "게스트";
+  chip.textContent = loggedIn ? (verifiedSession ? "서버 검증됨" : "로그인됨") : "게스트";
   chip.dataset.loggedIn = String(loggedIn);
-  chip.title = summary ? `사용자 ${summary.subject} · 만료 ${summary.expiresAt}` : "";
+  chip.title = verifiedSession
+    ? `백엔드 검증 사용자 ${verifiedSession.user.id} · 만료 ${summary?.expiresAt ?? "확인 불가"}`
+    : summary
+      ? `사용자 ${summary.subject} · 만료 ${summary.expiresAt}`
+      : "";
   loginButton.hidden = loggedIn;
   logoutButton.hidden = !loggedIn;
   heroLoginButton.textContent = loggedIn ? "회원 카탈로그 새로고침" : "회원 혜택 확인하기";
@@ -289,12 +296,30 @@ function handleCallback() {
   }
 }
 
+async function verifySession() {
+  if (!token || !config.authApiUrl) return;
+
+  try {
+    verifiedSession = await verifyTokenWithBackend(token, config.authApiUrl);
+  } catch (error) {
+    clearToken();
+    token = null;
+    verifiedSession = null;
+    callbackNotice = {
+      kind: "error",
+      title: "백엔드 JWT 검증에 실패했습니다",
+      message: error.message,
+    };
+  }
+}
+
 function bindEvents() {
   document.querySelector("#login-button").addEventListener("click", openLogin);
   document.querySelector("#hero-login-button").addEventListener("click", openLogin);
   document.querySelector("#logout-button").addEventListener("click", () => {
     clearToken();
     token = null;
+    verifiedSession = null;
     renderSession();
     loadCatalog();
   });
@@ -312,6 +337,8 @@ if (token && isExpired(token)) {
     message: "다시 로그인하면 회원 카탈로그를 확인할 수 있습니다.",
   };
 }
+
+await verifySession();
 
 renderSession();
 bindEvents();

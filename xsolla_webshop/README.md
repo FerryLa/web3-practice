@@ -48,6 +48,7 @@
 - [CHAP 02 — Catalog](./catalog/README.md)
 - [CHAP 03 — Personalization](./personalization/README.md)
 - [CHAP 04 — Frontend Integration](./frontend/README.md)
+- [CHAP 05 — Backend JWT Verification](./backend/README.md)
 
 ### 2. 프런트엔드
 
@@ -58,10 +59,11 @@
 - [x] 기본 상품 카드 표시
 - [x] 로그인 후 개인화 상품 카드 표시
 
-### 3. 백엔드 개념
+### 3. 백엔드
 
-- [ ] 브라우저가 전달한 토큰을 그대로 신뢰하지 않는 이유 이해
-- [ ] 서버의 토큰 및 사용자 검증 흐름 이해
+- [x] 브라우저가 전달한 토큰을 그대로 신뢰하지 않는 이유 이해
+- [x] 프로젝트 JWKS를 사용한 RS256 JWT 검증 구현
+- [x] 서버의 토큰 및 사용자 검증 흐름 이해
 - [ ] 웹훅 서명 검증과 멱등성 개념 이해
 
 ## 1단계: Login 프로젝트 생성

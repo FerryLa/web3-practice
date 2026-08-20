@@ -102,17 +102,17 @@ $catalog.items | Select-Object sku, name,
 
 JWT는 인증 정보이므로 문서, 소스 코드, 셸 기록 또는 Git 저장소에 넣지 않는다.
 
-## 2026-08-13 테스트 결과
+## 2026-08-20 테스트 결과
 
 | 테스트 | 예상 결과 | 실제 결과 | 상태 |
 |---|---|---|---|
 | 비로그인 전체 목록 조회 | 기본 패키지 6개 | 6개 반환 | 통과 |
 | 비로그인 목록에서 회원 SKU 검색 | 없음 | `bluc_pack_member_1200` 없음 | 통과 |
 | 비로그인 상태에서 회원 SKU 직접 조회 | 접근 불가 | HTTP 404 | 통과 |
-| `webshop_member="true"` JWT 조회 | 기본 6개 + 회원 전용 1개 | 사용자 JWT 필요 | 대기 |
+| `webshop_member="true"` JWT 조회 | 기본 6개 + 회원 전용 1개 | 7개 및 `bluc_pack_member_1200` 표시 | 통과 |
 | `webshop_member="false"` JWT 조회 | 기본 패키지 6개 | 사용자 JWT 필요 | 대기 |
 
-현재 검증으로 회원 전용 상품이 공개 카탈로그에서 숨겨지는 것은 확인했다. 개인화 전체 성공 판정은 `webshop_member="true"`인 사용자의 JWT로 7개 상품과 `bluc_pack_member_1200`을 확인한 후 완료한다.
+비로그인 사용자에게 회원 전용 상품이 숨겨지고, `webshop_member="true"`인 로그인 사용자에게 7개 상품과 `bluc_pack_member_1200`이 표시되는 것을 확인했다. `webshop_member="false"` 사용자 테스트는 별도로 남아 있다.
 
 ## 이 테스트를 하는 이유
 
@@ -139,9 +139,9 @@ Publisher Account의 규칙 화면은 관리 설정을 보여준다. 반면 카�
 - [x] `webshop_member` 문자열 속성 스키마 구성
 - [x] 회원 전용 카탈로그 표시 규칙 구성
 - [x] 비로그인 사용자에게 회원 전용 상품이 숨겨지는지 확인
-- [ ] `webshop_member="true"` 사용자 JWT로 회원 전용 상품 조회
+- [x] `webshop_member="true"` 사용자 JWT로 회원 전용 상품 조회
 - [ ] `webshop_member="false"` 사용자 JWT로 기본 상품만 조회
-- [ ] 프런트엔드에서 JWT 유무에 따라 상품 카드 다시 불러오기
+- [x] 프런트엔드에서 JWT 유무에 따라 상품 카드 다시 불러오기
 
 ## 다음 장
 

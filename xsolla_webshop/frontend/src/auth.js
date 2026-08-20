@@ -29,6 +29,35 @@ export function clearToken() {
   sessionStorage.removeItem(TOKEN_KEY);
 }
 
+export async function verifyTokenWithBackend(
+  token,
+  apiUrl,
+  { signal, fetchImpl = fetch } = {},
+) {
+  const response = await fetchImpl(new URL("/api/auth/verify", apiUrl), {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+    signal,
+  });
+
+  let body;
+  try {
+    body = await response.json();
+  } catch {
+    body = null;
+  }
+
+  if (!response.ok || body?.authenticated !== true) {
+    const error = new Error(
+      body?.error?.message || `JWT 검증 API가 HTTP ${response.status}를 반환했습니다.`,
+    );
+    error.code = body?.error?.code || "verification_failed";
+    throw error;
+  }
+
+  return body;
+}
+
 export function decodeJwtPayload(token) {
   try {
     const [, payload] = token.split(".");

@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { decodeJwtPayload, isExpired, readAuthCallback } from "../src/auth.js";
+import {
+  decodeJwtPayload,
+  isExpired,
+  readAuthCallback,
+  verifyTokenWithBackend,
+} from "../src/auth.js";
 
 function createToken(payload) {
   const encode = (value) =>
@@ -43,4 +48,20 @@ test("JWT payload를 디코딩하고 만료를 판별한다", () => {
 test("잘못된 JWT는 payload가 없는 것으로 처리한다", () => {
   assert.equal(decodeJwtPayload("not-a-jwt"), null);
   assert.equal(isExpired("not-a-jwt"), false);
+});
+
+test("백엔드 검증 API에 Bearer JWT를 전달한다", async () => {
+  const result = await verifyTokenWithBackend("header.payload.signature", "http://localhost:3001", {
+    fetchImpl: async (url, options) => {
+      assert.equal(url.href, "http://localhost:3001/api/auth/verify");
+      assert.equal(options.method, "POST");
+      assert.equal(options.headers.Authorization, "Bearer header.payload.signature");
+      return new Response(JSON.stringify({ authenticated: true, user: { id: "user-id" } }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    },
+  });
+
+  assert.equal(result.user.id, "user-id");
 });

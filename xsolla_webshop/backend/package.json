@@ -1,0 +1,13 @@
+{
+  "name": "xsolla-webshop-backend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --env-file-if-exists=.env.local src/index.js",
+    "start": "node --env-file-if-exists=.env.local src/index.js",
+    "member:grant": "node --env-file-if-exists=.env.local src/member.js grant",
+    "member:revoke": "node --env-file-if-exists=.env.local src/member.js revoke",
+    "test": "node --test"
+  }
+}
