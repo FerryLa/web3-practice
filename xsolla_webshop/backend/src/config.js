@@ -24,5 +24,7 @@ export function loadConfig(env = process.env) {
       .map((origin) => origin.trim())
       .filter(Boolean),
     remoteUserValidation: parseBoolean(env.XSOLLA_REMOTE_USER_VALIDATION),
+    webhookSecret: env.XSOLLA_WEBHOOK_SECRET?.trim() || "",
+    webhookEventStorePath: env.XSOLLA_WEBHOOK_EVENT_STORE_PATH?.trim() || "./data/webhook-events.json",
   };
 }

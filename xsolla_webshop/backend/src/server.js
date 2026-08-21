@@ -1,5 +1,11 @@
 import { createServer } from "node:http";
 import { AuthError, AuthServiceError } from "./errors.js";
+import {
+  createXsollaWebhookProcessor,
+  readRawBody,
+  verifyXsollaWebhookSignature,
+  WebhookError,
+} from "./webhook.js";
 
 function sendJson(response, status, body) {
   const json = JSON.stringify(body);
@@ -34,7 +40,21 @@ function setCorsHeaders(request, response, allowedOrigins) {
   return true;
 }
 
-export function createRequestHandler({ verifyToken, validateRemoteUser, allowedOrigins = [] }) {
+export function createRequestHandler({
+  verifyToken,
+  validateRemoteUser,
+  allowedOrigins = [],
+  webhookSecret = "",
+  webhookEventStore,
+  webhookUserExists,
+  onWebhookEvent,
+}) {
+  const processWebhook = createXsollaWebhookProcessor({
+    eventStore: webhookEventStore,
+    userExists: webhookUserExists,
+    onEvent: onWebhookEvent,
+  });
+
   return async function handleRequest(request, response) {
     if (!setCorsHeaders(request, response, allowedOrigins)) {
       sendJson(response, 403, { error: { code: "origin_not_allowed", message: "허용되지 않은 Origin입니다." } });
@@ -49,6 +69,39 @@ export function createRequestHandler({ verifyToken, validateRemoteUser, allowedO
 
     if (request.method === "GET" && request.url === "/health") {
       sendJson(response, 200, { status: "ok" });
+      return;
+    }
+
+    if (request.method === "POST" && request.url === "/webhooks/xsolla") {
+      try {
+        if (!webhookSecret) {
+          throw new WebhookError("WEBHOOK_NOT_CONFIGURED", "Webhook secret is not configured.", 503);
+        }
+        const rawBody = await readRawBody(request);
+        if (!verifyXsollaWebhookSignature(rawBody, request.headers.authorization, webhookSecret)) {
+          throw new WebhookError("INVALID_SIGNATURE", "Invalid signature.");
+        }
+
+        let payload;
+        try {
+          payload = JSON.parse(rawBody.toString("utf8"));
+        } catch {
+          throw new WebhookError("INVALID_PARAMETER", "Webhook body is not valid JSON.");
+        }
+
+        await processWebhook(payload);
+        response.writeHead(204, { "Cache-Control": "no-store" });
+        response.end();
+      } catch (error) {
+        if (error instanceof WebhookError) {
+          sendJson(response, error.status, { error: { code: error.code, message: error.message } });
+          return;
+        }
+        console.error("Xsolla webhook failed unexpectedly", error);
+        sendJson(response, 500, {
+          error: { code: "INTERNAL_ERROR", message: "Webhook processing failed." },
+        });
+      }
       return;
     }
 

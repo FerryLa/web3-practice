@@ -367,6 +367,53 @@ Cookie: webshop_session=...
 - 실패 시 재시도 가능한 상태 관리
 - 환불과 차지백 시 재화 회수 정책
 
+### 웹훅으로 전달되는 내용
+
+웹훅은 프런트엔드가 Xsolla에 보내는 API가 아니다. 결제 과정에서 Xsolla가 게임 백엔드의 공개 HTTPS 주소로 사용자와 주문 상태를 전달하는 Server-to-Server 요청이다.
+
+```text
+user_validation
+  Xsolla → 게임 백엔드: 이 사용자가 실제 게임 사용자인지 확인
+
+order_paid
+  Xsolla → 게임 백엔드: 결제 완료 사용자, 주문 ID, 구매 SKU와 수량 전달
+
+order_canceled
+  Xsolla → 게임 백엔드: 취소된 주문 ID와 회수할 상품 정보 전달
+```
+
+요청 헤더에는 다음 서명이 포함된다.
+
+```http
+Authorization: Signature <SHA-1 signature>
+```
+
+결제 완료 payload의 핵심 형태는 다음과 같다. 실제 필드는 프로젝트의 웹훅 방식과 버전에 따라 추가될 수 있다.
+
+```json
+{
+  "notification_type": "order_paid",
+  "user": {
+    "id": "Xsolla 사용자 UUID"
+  },
+  "order": {
+    "id": 4201,
+    "mode": "sandbox"
+  },
+  "items": [
+    {
+      "sku": "bluc_pack_1200",
+      "type": "bundle",
+      "quantity": 1
+    }
+  ]
+}
+```
+
+백엔드는 원본 JSON과 Webhook Secret으로 서명을 검증한 후 `order.id` 또는 `transaction.id`를 멱등성 키로 기록한다. 같은 이벤트가 다시 도착하면 BLUC를 중복 지급하지 않고 이전 처리 결과를 재사용해야 한다.
+
+현재 CHAP 06 구현은 서명 검증, 이벤트 분기, 파일 기반 중복 방지와 `204 No Content` 응답까지 수행한다. 실제 BLUC 잔액 지급과 취소 시 회수는 결제 연결 단계에서 추가한다. Webhook Secret은 백엔드의 `.env.local`에만 보관하며 프런트엔드, 문서, Git 또는 채팅에 기록하지 않는다.
+
 ### 완료 기준
 
 - 테스트 결제가 성공하면 정확한 게임 계정에 재화가 한 번만 지급된다.
