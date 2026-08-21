@@ -49,6 +49,15 @@ https://발급된-터널-주소/webhooks/xsolla
 
 2025년 1월 22일 이후 등록한 프로젝트는 결합형 `order_paid`와 `order_canceled` 웹훅을 사용한다. Publisher Account 테스트 화면에 `payment`와 `refund`가 표시되는 이전 프로젝트도 같은 엔드포인트에서 처리한다.
 
+## 2026-08-21 테스트 결과
+
+```text
+Backend: 21 tests passed, 0 failed
+Frontend: 5 tests passed, 0 failed
+```
+
+원본 본문 서명 검증, 변조 요청 거부, 사용자 검증 성공·실패, 주문 ID 중복 방지 및 서버 재시작 후 중복 기록 유지 테스트가 모두 통과했다. 이 결과는 로컬 자동 테스트이며, 외부 HTTPS 터널과 Publisher Account 테스트는 별도로 수행한다.
+
 ## 현재 사용자 검증 정책
 
 현재 학습용 구현은 서명이 유효하고 `user.id`가 비어 있지 않으면 사용자가 존재한다고 간주한다. 운영 환경에서는 `webhookUserExists`를 게임 사용자 DB 조회 함수로 교체해야 한다.
@@ -61,6 +70,7 @@ https://발급된-터널-주소/webhooks/xsolla
 - [x] 사용자 검증 실패에 `400 INVALID_USER` 반환
 - [x] `order.id` 또는 `transaction.id` 기반 중복 방지
 - [x] 처리 성공 시 `204 No Content` 반환
+- [x] 백엔드 21개 및 프런트엔드 5개 자동 테스트 통과
 - [ ] 외부 HTTPS 터널 연결
 - [ ] Publisher Account의 정상·오류 웹훅 테스트 통과
 
